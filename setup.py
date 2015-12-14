@@ -25,7 +25,7 @@ else:
 install = raw_input('Would you like to untar the downloaded files? This might take a while: ')
 if install == 'y' or install == 'Y' or install == 'yes' or install == 'YES':
 	# Install gcc if path DNE
-	if os.path.isdir('gcc-5.3.0'):
+	if os.path.isdir('gcc-install'):
 		print('gcc 5.3.0 seems to be already installed locally')
 	else:
 		print('Extracting gcc 5.3.0')
@@ -38,6 +38,26 @@ if install == 'y' or install == 'Y' or install == 'yes' or install == 'YES':
 		subprocess.Popen('./contrib/download_prerequisites')
 		os.chdir('..')
 		print('Downloaded pre-requisite packages')
+		# Creating install directory
+		print('Configuring gcc')
+		os.mkdir('gcc-install')
+		os.mkdir('gcc-build')
+		os.chdir('gcc-build')
+		gcc_config = '../gcc-5.3.0/configure --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --enable-languages=c,c++,fortran --with-tune=generic --disable-multilib --enable-multiarch --prefix=' + os.path.abspath('../gcc-install')
+		print(gcc_config)
+		process = subprocess.Popen(gcc_config.split(), stdout=subprocess.PIPE)
+		output = process.communicate()[0] 
+		print('gcc has been configured')
+		gcc_make = 'make -j16'
+		process = subprocess.Popen(gcc_make.split(), stdout=subprocess.PIPE)
+		output = process.communicate()[0]
+		print('gcc has been made')
+		gcc_install = 'make install'
+		process = subprocess.Popen(gcc_install.split(), stdout=subprocess.PIPE)
+		output = process.communicate()[0]
+		print('gcc has been installed')
+		os.chdir('..')
+
 	
 	# Install Trilinos if path DNE
 	if os.path.isdir('trilinos-12.4.2-Source'):
