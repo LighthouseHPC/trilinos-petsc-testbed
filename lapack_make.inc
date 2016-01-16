@@ -27,7 +27,7 @@ LOADOPTS = -Wl,-rpath=$(GCC_DIR)/../lib64
 #  Comment out the following line to include deprecated routines to the
 #  LAPACK library.
 #
-#MAKEDEPRECATED = Yes
+MAKEDEPRECATED = Yes
 #
 # Timer for the SECOND and DSECND routines
 #
