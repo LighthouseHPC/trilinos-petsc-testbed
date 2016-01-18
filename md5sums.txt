@@ -1,0 +1,5 @@
+c9616fd448f980259c31de613e575719  gcc-5.3.0.tar.bz2
+f2f6c67134e851fe189bb3ca1fbb5101  lapack-3.6.0.tgz
+5651e8b7a72d7c77ca68da48f3a5d108  mvapich2-2.2b.tar.gz
+6256264c5c8bc47253dbb38eb6ba26d1  trilinos-12.4.2.tar.bz2
+b5be2745dc9dc7fb5b3df73393b1e1d4  setup.py

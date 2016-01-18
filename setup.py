@@ -4,38 +4,44 @@ import urllib
 import os
 import tarfile
 
+download_progress = 0
+percentage = 0
+
+def dlProgress(block_no, block_size, file_size):
+	total = file_size/block_size
+	global percentage
+	if (int(100*float(block_no)/float(total)) == percentage):
+		print("Percentage complete: %i" % (percentage))
+		percentage += 10
+
 ###  Download functions
 def download_gcc():
-	if os.path.isfile('gcc-5.3.0.tar.bz2'): 
-		print('gcc 5.3.0 tarball already exists...skipping download')
-	else:		
-		print('Downloading gcc 5.3.0')
-		gcc = urllib.urlretrieve('ftp://gnu.mirrorcatalogs.com/gnu/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2' , 'gcc-5.3.0.tar.bz2')
-		print('Downloaded gcc 5.3.0')
+	global percentage
+	percentage = 0
+	print('Downloading gcc 5.3.0')
+	gcc = urllib.urlretrieve('ftp://ftp.gnu.org/gnu/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2', 'gcc-5.3.0.tar.bz2', reporthook=dlProgress)
+	print('Downloaded gcc 5.3.0')
 
 def download_mvapich2():
-	if os.path.isfile('mvapich2-2.2b.tar.gz'):
-		print('mvapich2 2.2b tarball already exists...skipping download')
-	else:
-		print('Downloading mvapich2 2.2b')
-		mvapich2 = urllib.urlretrieve('http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-2.2b.tar.gz', 'mvapich2-2.2b.tar.gz')
-		print('Downloaded mvapich2 2.2b')
+	global percentage
+	percentage = 0
+	print('Downloading mvapich2 2.2b')
+	mvapich2 = urllib.urlretrieve('http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-2.2b.tar.gz', 'mvapich2-2.2b.tar.gz', reporthook=dlProgress)
+	print('Downloaded mvapich2 2.2b')
 
 def download_lapack():
-	if os.path.isfile('lapack-3.6.0.tgz'):
-		print('LAPACK 3.6.0 tarball already exists...skipping download')
-	else:
-		print('Downloading LAPACK 3.6.0')
-		lapack = urllib.urlretrieve('http://www.netlib.org/lapack/lapack-3.6.0.tgz', 'lapack-3.6.0.tgz')
-		print('Downloaded LAPACK 3.6.0')
+	global percentage
+	percentage = 0
+	print('Downloading LAPACK 3.6.0')
+	lapack = urllib.urlretrieve('http://www.netlib.org/lapack/lapack-3.6.0.tgz', 'lapack-3.6.0.tgz', reporthook=dlProgress)
+	print('Downloaded LAPACK 3.6.0')
 
 def download_trilinos():
-	if os.path.isfile('trilinos-12.4.2.tar.bz2'):
-		print('Trilinos 12.4.2 already exists...skipping download') 
-	else:
-		print('Downloading Trilinos 12.4.2')
-		trilinos = urllib.urlretrieve('http://trilinos.csbsju.edu/download/files/trilinos-12.4.2-Source.tar.bz2', 'trilinos-12.4.2.tar.bz2')
-		print('Downloaded Trilinos 12.4.2')
+	global percentage
+	percentage = 0
+	print('Downloading Trilinos 12.4.2')
+	trilinos = urllib.urlretrieve('http://trilinos.csbsju.edu/download/files/trilinos-12.4.2-Source.tar.bz2', 'trilinos-12.4.2.tar.bz2', reporthook=dlProgress)
+	print('Downloaded Trilinos 12.4.2')
 
 ###  Extraction functions
 def extract_gcc():
@@ -94,7 +100,7 @@ def install_gcc():
 
 ### Main function
 if __name__ == "__main__":
-	answer = raw_input('Want to download things?')
+	answer = raw_input('Want to download things?: ')
 	if answer == 'y' or answer == 'Y':
 
 		answer = raw_input('Want to download gcc?: ')
@@ -103,6 +109,9 @@ if __name__ == "__main__":
 		answer = raw_input('Want to download mvapich2?: ')
 		if answer == 'y' or answer == 'Y':
 			download_mvapich2()
+		answer = raw_input('Want to download LAPACK?: ')
+		if answer == 'y' or answer == 'Y':
+			download_lapack()
 		answer = raw_input('Want to download Trilinos?: ')
 		if answer == 'y' or answer == 'Y':
 			download_trilinos()
