@@ -3,6 +3,7 @@ import subprocess
 import urllib
 import os
 import tarfile
+import shutil
 
 download_progress = 0
 percentage = 0
@@ -116,7 +117,6 @@ def install_gcc():
 	os.chdir('..')
 
 def install_mvapich2():
-	"""
 	os.mkdir('mvapich2-install')
 	os.chdir('mvapich2-2.2b')
 	gcc_path = os.path.abspath('../gcc-install/bin')
@@ -128,13 +128,30 @@ def install_mvapich2():
 	)
 	subprocess.check_call(install_cmd, shell=True)
 	print("mvapich2 configured")
-	"""
-	os.chdir('mvapich2-2.2b')
 	subprocess.check_call("make -j24", shell=True)
 	print("mvapich2 made")
 	subprocess.check_call("make install", shell=True)
 	print("mvapich2 installed")
 	os.chdir('..')
+
+def install_lapack():
+	answer = raw_input("Have you added gcc-install/lib64 to the library path?")
+	if answer == 'y' or answer == 'Y':
+		gcc_dir = os.path.abspath('gcc-install/bin')
+		with open("make.inc", "r+") as f:
+			first_line = f.readline()
+			lines = f.readlines()
+			f.seek(0)
+			f.write("GCC_DIR=" + gcc_dir + "\n")
+			f.write(first_line)
+			f.writelines(lines)
+		shutil.copy("make.inc","lapack-3.6.0/make.inc")
+		shutil.copy("Makefile","lapack-3.6.0/Makefile")
+		os.chdir("lapack-3.6.0")
+		subprocess.call("make all -j24", shell=True)
+		print("LAPACK has been made\n")
+		os.chdir("..")
+
 
 ### Main function
 if __name__ == "__main__":
@@ -162,6 +179,7 @@ if __name__ == "__main__":
 	if install == 'y' or install == 'Y': 
 		gcc_install = raw_input('Want to install gcc?: ')
 		mvapich2_install = raw_input('Want to install mvapich2?: ')
+		lapack_install = raw_input('Want to install LAPACK?: ')
 
 	if download == 'y' or download == 'Y':
 		if gcc_download == 'y' or gcc_download == 'Y':
@@ -192,3 +210,5 @@ if __name__ == "__main__":
 			install_gcc()
 		if mvapich2_install == 'y' or mvapich2_install == 'Y':
 			install_mvapich2()
+		if lapack_install == 'y' or lapack_install == 'Y':
+			install_lapack()
