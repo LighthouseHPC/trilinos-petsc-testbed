@@ -115,6 +115,27 @@ def install_gcc():
 	print('gcc has been installed')                                          
 	os.chdir('..')
 
+def install_mvapich2():
+	"""
+	os.mkdir('mvapich2-install')
+	os.chdir('mvapich2-2.2b')
+	gcc_path = os.path.abspath('../gcc-install/bin')
+	install_cmd = ('./configure'
+		' CC=' + gcc_path + '/gcc'
+		' CXX=' + gcc_path + '/g++'
+		' FC=' + gcc_path + '/gfortran'
+		' --prefix=' + os.path.abspath('../mvapich2-install')
+	)
+	subprocess.check_call(install_cmd, shell=True)
+	print("mvapich2 configured")
+	"""
+	os.chdir('mvapich2-2.2b')
+	subprocess.check_call("make -j24", shell=True)
+	print("mvapich2 made")
+	subprocess.check_call("make install", shell=True)
+	print("mvapich2 installed")
+	os.chdir('..')
+
 ### Main function
 if __name__ == "__main__":
 
@@ -140,6 +161,7 @@ if __name__ == "__main__":
 	install = raw_input('Want to install things?: ')
 	if install == 'y' or install == 'Y': 
 		gcc_install = raw_input('Want to install gcc?: ')
+		mvapich2_install = raw_input('Want to install mvapich2?: ')
 
 	if download == 'y' or download == 'Y':
 		if gcc_download == 'y' or gcc_download == 'Y':
@@ -168,3 +190,5 @@ if __name__ == "__main__":
 	if install == 'y' or install == 'Y':
 		if gcc_install == 'y' or gcc_install == 'Y':
 			install_gcc()
+		if mvapich2_install == 'y' or mvapich2_install == 'Y':
+			install_mvapich2()
