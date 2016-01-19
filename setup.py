@@ -19,28 +19,35 @@ def download_gcc():
 	global percentage
 	percentage = 0
 	print('Downloading gcc 5.3.0')
-	gcc = urllib.urlretrieve('ftp://ftp.gnu.org/gnu/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2', 'gcc-5.3.0.tar.bz2', reporthook=dlProgress)
+	urllib.urlretrieve('ftp://ftp.gnu.org/gnu/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2', 'gcc-5.3.0.tar.bz2', reporthook=dlProgress)
 	print('Downloaded gcc 5.3.0')
 
 def download_mvapich2():
 	global percentage
 	percentage = 0
 	print('Downloading mvapich2 2.2b')
-	mvapich2 = urllib.urlretrieve('http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-2.2b.tar.gz', 'mvapich2-2.2b.tar.gz', reporthook=dlProgress)
+	urllib.urlretrieve('http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-2.2b.tar.gz', 'mvapich2-2.2b.tar.gz', reporthook=dlProgress)
 	print('Downloaded mvapich2 2.2b')
 
 def download_lapack():
 	global percentage
 	percentage = 0
 	print('Downloading LAPACK 3.6.0')
-	lapack = urllib.urlretrieve('http://www.netlib.org/lapack/lapack-3.6.0.tgz', 'lapack-3.6.0.tgz', reporthook=dlProgress)
+	urllib.urlretrieve('http://www.netlib.org/lapack/lapack-3.6.0.tgz', 'lapack-3.6.0.tgz', reporthook=dlProgress)
 	print('Downloaded LAPACK 3.6.0')
+
+def download_boost():
+	global percentage
+	percentage = 0
+	print('Downloading Boost 1.60.0')
+	urllib.urlretrieve('http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.tar.bz2/download', 'boost_1_60_0.tar.bz2', reporthook=dlProgress)
+	print('Downloaded Boost 1.60.0')
 
 def download_trilinos():
 	global percentage
 	percentage = 0
 	print('Downloading Trilinos 12.4.2')
-	trilinos = urllib.urlretrieve('http://trilinos.csbsju.edu/download/files/trilinos-12.4.2-Source.tar.bz2', 'trilinos-12.4.2.tar.bz2', reporthook=dlProgress)
+	urllib.urlretrieve('http://trilinos.csbsju.edu/download/files/trilinos-12.4.2-Source.tar.bz2', 'trilinos-12.4.2.tar.bz2', reporthook=dlProgress)
 	print('Downloaded Trilinos 12.4.2')
 
 ###  Extraction functions
@@ -65,11 +72,25 @@ def extract_trilinos():
 	trilinos_tar.close()
 	print('Extracted Trilinos 12.4.2')
 
+def extract_boost():
+	print('Extracting Boost 1.60.0')
+	trilinos_tar = tarfile.open('boost_1_60_0.tar.bz2')
+	trilinos_tar.extractall()
+	trilinos_tar.close()
+	print('Extracted Boost 1.60.0')
+
+def extract_lapack():
+	print('Extracting LAPACK 3.6.0')
+	trilinos_tar = tarfile.open('lapack-3.6.0.tgz')
+	trilinos_tar.extractall()
+	trilinos_tar.close()
+	print('Extracted LAPACK 3.6.0')
+
 ### Install functions
 def install_gcc():
 	print('Downloading pre-requisite packages')
 	os.chdir('gcc-5.3.0')                     
-	subprocess.Popen('./contrib/download_prerequisites')                                
+	subprocess.check_call('./contrib/download_prerequisites')                                
 	os.chdir('..')                                                                      
 	print('Downloaded pre-requisite packages')                                          
 	# Creating install directory                                                        
@@ -78,60 +99,72 @@ def install_gcc():
 	os.mkdir('gcc-build')                                                               
 	os.chdir('gcc-build')                                                               
 	gcc_config = ('../gcc-5.3.0/configure'                                              
-			' --enable-shared'                                                              
-			' --enable-threads=posix'                                                       
-			' --enable-languages=c,c++,fortran,java'                                        
-			' --disable-multilib'                                                         
-			' --prefix=' + os.path.abspath('../gcc-install')                                
-			)                                                                               
+		' --enable-shared'                                                              
+		' --enable-threads=posix'                                                       
+		' --enable-languages=c,c++,fortran'
+		' --disable-multilib'                                                         
+		' --prefix=' + os.path.abspath('../gcc-install')                                
+		)                                                                               
 	print(gcc_config)                                                                   
-	process = subprocess.Popen(gcc_config.split(), stdout=subprocess.PIPE)              
-	output = process.communicate()[0]                                                   
+	process = subprocess.check_call(gcc_config.split(), stdout=subprocess.PIPE)              
 	print('gcc has been configured')                                                    
-	gcc_make = 'make -j16'                                                              
-	process = subprocess.Popen(gcc_make.split(), stdout=subprocess.PIPE)                
-	output = process.communicate()[0]                                                   
-	print('gcc has been made')                                                          
-	gcc_install = 'make install'                                                        
-	process = subprocess.Popen(gcc_install.split(), stdout=subprocess.PIPE)             
-	output = process.communicate()[0]                                                   
-	print('gcc has been installed')                                                     
-	os.chdir('..')                                                                      
+	os.chdir('gcc-build')
+	process = subprocess.check_call("make -j24", shell=True)
+	print('gcc has been made')                                              
+	process = subprocess.check_call("make install", shell=True)
+	print('gcc has been installed')                                          
+	os.chdir('..')
 
 ### Main function
 if __name__ == "__main__":
-	answer = raw_input('Want to download things?: ')
-	if answer == 'y' or answer == 'Y':
 
-		answer = raw_input('Want to download gcc?: ')
-		if answer == 'y' or answer == 'Y':
+#  Downloading 
+	download = raw_input('Want to download things?: ')
+	if download == 'y' or download == 'Y':
+		gcc_download = raw_input('Want to download gcc?: ')
+		mvapich2_download = raw_input('Want to download mvapich2?: ')
+		lapack_download = raw_input('Want to download LAPACK?: ')
+		boost_download = raw_input('Want to download Boost?: ')
+		trilinos_download = raw_input('Want to download Trilinos?: ')
+
+#  Extraction
+	extract = raw_input('Want to extract things?: ')
+	if extract == 'y' or extract == 'Y':
+		gcc_extract = raw_input('Want to extract gcc?: ')
+		mvapich2_extract = raw_input('Want to extract mvapich2?: ')
+		lapack_extract = raw_input('Want to extract LAPACK?: ')
+		boost_extract = raw_input('Want to extract Boost?: ')
+		trilinos_extract = raw_input('Want to extract Trilinos?: ')
+
+#  Installation
+	install = raw_input('Want to install things?: ')
+	if install == 'y' or install == 'Y': 
+		gcc_install = raw_input('Want to install gcc?: ')
+
+	if download == 'y' or download == 'Y':
+		if gcc_download == 'y' or gcc_download == 'Y':
 			download_gcc()	
-		answer = raw_input('Want to download mvapich2?: ')
-		if answer == 'y' or answer == 'Y':
+		if mvapich2_download == 'y' or mvapich2_download == 'Y':
 			download_mvapich2()
-		answer = raw_input('Want to download LAPACK?: ')
-		if answer == 'y' or answer == 'Y':
+		if lapack_download == 'y' or lapack_download == 'Y':
 			download_lapack()
-		answer = raw_input('Want to download Trilinos?: ')
-		if answer == 'y' or answer == 'Y':
+		if boost_download == 'y' or boost_download == 'Y':
+			download_boost()
+		if trilinos_download == 'y' or trilinos_download == 'Y':
 			download_trilinos()
-
-	answer = raw_input('Want to extract things?')
-	if answer == 'y' or answer == 'Y':
-
-		answer = raw_input('Want to extract gcc?: ')
-		if answer == 'y' or answer == 'Y':
+	
+	if extract == 'y' or extract == 'Y':
+		if gcc_extract == 'y' or gcc_extract == 'Y':
 			extract_gcc()	
-		answer = raw_input('Want to extract mvapich2?: ')
-		if answer == 'y' or answer == 'Y':
-			extract_mvapich2()
-		answer = raw_input('Want to extract Trilinos?: ')
-		if answer == 'y' or answer == 'Y':
+		if mvapich2_extract == 'y' or mvapich2_extract == 'Y':
+			extract_mvapich2()	
+		if lapack_extract == 'y' or lapack_extract == 'Y':
+			extract_lapack()	
+		if boost_extract == 'y' or boost_extract == 'Y':
+			extract_boost()	
+		if trilinos_extract == 'y' or trilinos_extract == 'Y':
 			extract_trilinos()
 
-	answer = raw_input('Want to install things?')
-	if answer == 'y' or answer == 'Y':
-		answer = raw_input('Want to install gcc?: ')
-		if answer == 'y' or answer == 'Y':
+	if install == 'y' or install == 'Y':
+		if gcc_install == 'y' or gcc_install == 'Y':
 			install_gcc()
-
