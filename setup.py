@@ -149,6 +149,7 @@ def install_lapack():
 		shutil.copy("Makefile","lapack-3.6.0/Makefile")
 		os.chdir("lapack-3.6.0")
 		subprocess.call("make all -j24", shell=True)
+		subprocess.call("make all -j24", shell=True)
 		print("LAPACK has been made\n")
 		os.chdir("..")
 
