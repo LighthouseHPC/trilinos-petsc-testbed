@@ -161,6 +161,22 @@ def install_boost():
 	print("Boost has been installed\n")
 	os.chdir("..")
 
+def install_trilinos():
+	gcc_dir = os.path.abspath("./gcc-install")
+	mvapich2_dir = os.path.abspath("./mvapich2-install")
+	lapack_dir = os.path.abspath("./lapack-install")
+	boost_dir = os.path.abspath("./boost-install")
+	with open("do-configure", "r+") as f:
+		first_line = f.readline()
+		lines = f.readlines()
+		f.seek(0)
+		f.write(first_line + '\n')
+		f.write("GCC=" + gcc_dir + '\n')
+		f.write("MVAPICH=" + mvapich2_dir + '\n')
+		f.write("LAPACK=" + lapack_dir + '\n')
+		f.write("BOOST=" + boost_dir + '\n')
+		f.writelines(lines)
+
 ### Main function
 if __name__ == "__main__":
 
@@ -189,6 +205,7 @@ if __name__ == "__main__":
 		mvapich2_install = raw_input('Want to install mvapich2?: ')
 		lapack_install = raw_input('Want to install LAPACK?: ')
 		boost_install = raw_input('Want to install Boost?: ')
+		trilinos_install = raw_input('Want to install Trilinos?: ')
 
 	if download == 'y' or download == 'Y':
 		if gcc_download == 'y' or gcc_download == 'Y':
@@ -223,3 +240,5 @@ if __name__ == "__main__":
 			install_lapack()
 		if boost_install == 'y' or boost_install == 'Y':
 			install_boost()
+		if trilinos_install == 'y' or trilinos_install == 'Y':
+			install_trilinos()

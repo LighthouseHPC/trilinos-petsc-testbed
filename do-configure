@@ -1,11 +1,7 @@
 #!/bin/bash
+
 TRILINOS_PATH=../trilinos-12.4.2-Source
 EXTRA_ARGS=$@
-
-GCC=/home/pamo8800/project/testbed/gcc-install
-MVAPICH=/home/pamo8800/project/testbed/mvapich2-install
-LAPACK=/home/pamo8800/project/testbed/lapack-3.6.0
-BOOST=/home/pamo8800/project/testbed/boost_1_60_0
 RPATH="-Wl,-rpath-link,${GCC}/lib64"
 ARGS="-llapack -lblas"
 
@@ -41,10 +37,10 @@ cmake \
 -D TPL_ENABLE_Boost=ON \
 -D TPL_ENABLE_Netcdf=OFF \
 -D Trilinos_ASSERT_MISSING_PACKAGES=OFF \
--D Boost_LIBRARY_DIRS:FILEPATH="${BOOST}/stage/lib" \
+-D Boost_LIBRARY_DIRS:FILEPATH="${BOOST}/lib" \
 -D Boost_INCLUDE_DIRS:FILEPATH="${BOOST}" \
--D BoostLib_LIBRARY_DIRS:FILEPATH="${BOOST}/stage/lib" \
--D BoostLib_INCLUDE_DIRS:FILEPATH="${BOOST}" \
+-D BoostLib_LIBRARY_DIRS:FILEPATH="${BOOST}/lib" \
+-D BoostLib_INCLUDE_DIRS:FILEPATH="${BOOST}/boost_1_60_0" \
 $EXTRA_ARGS \
 $ARGS \
 $RPATH \
