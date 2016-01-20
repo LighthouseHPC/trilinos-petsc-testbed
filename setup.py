@@ -68,7 +68,11 @@ def download_trilinos():
 
 def extract_gcc():
     print('Extracting gcc 5.3.0')
-    gcc_tar = tarfile.open('gcc-5.3.0.tar.bz2')
+    try:
+        gcc_tar = tarfile.open('gcc-5.3.0.tar.bz2')
+    except:
+        print('gcc tar file does not exist')
+        exit()
     gcc_tar.extractall()
     gcc_tar.close()
     print('Extracted gcc 5.3.0')
@@ -76,7 +80,11 @@ def extract_gcc():
 
 def extract_mvapich2():
     print('Extracting mvapich2 2.2b')
-    mvapich2_tar = tarfile.open('mvapich2-2.2b.tar.gz')
+    try:
+        mvapich2_tar = tarfile.open('mvapich2-2.2b.tar.gz')
+    except:
+        print('Mvapich2 tar file does not exist')
+        exit()
     mvapich2_tar.extractall()
     mvapich2_tar.close()
     print('Extracted mvapich2 2.2b')
@@ -84,7 +92,11 @@ def extract_mvapich2():
 
 def extract_trilinos():
     print('Extracting Trilinos 12.4.2')
-    trilinos_tar = tarfile.open('trilinos-12.4.2.tar.bz2')
+    try:
+        trilinos_tar = tarfile.open('trilinos-12.4.2.tar.bz2')
+    except:
+        print('Trilinos tar file does not exist')
+        exit()
     trilinos_tar.extractall()
     trilinos_tar.close()
     print('Extracted Trilinos 12.4.2')
@@ -92,7 +104,11 @@ def extract_trilinos():
 
 def extract_boost():
     print('Extracting Boost 1.60.0')
-    trilinos_tar = tarfile.open('boost_1_60_0.tar.bz2')
+    try:
+        trilinos_tar = tarfile.open('boost_1_60_0.tar.bz2')
+    except:
+        print('Boost tar file does not exist')
+        exit()
     trilinos_tar.extractall()
     trilinos_tar.close()
     print('Extracted Boost 1.60.0')
@@ -100,7 +116,11 @@ def extract_boost():
 
 def extract_lapack():
     print('Extracting LAPACK 3.6.0')
-    trilinos_tar = tarfile.open('lapack-3.6.0.tgz')
+    try:
+        trilinos_tar = tarfile.open('lapack-3.6.0.tgz')
+    except:
+        print('LAPACK tar file does not exist')
+        exit()
     trilinos_tar.extractall()
     trilinos_tar.close()
     print('Extracted LAPACK 3.6.0')
