@@ -109,7 +109,7 @@ def install_gcc():
 	print(gcc_config)                                                                   
 	process = subprocess.check_call(gcc_config.split(), stdout=subprocess.PIPE)              
 	print('gcc has been configured')                                                    
-	process = subprocess.check_call("make -j24", shell=True)
+	process = subprocess.check_call("make -j12", shell=True)
 	print('gcc has been made')                                              
 	process = subprocess.check_call("make install", shell=True)
 	print('gcc has been installed')                                          
@@ -127,7 +127,7 @@ def install_mvapich2():
 	)
 	subprocess.check_call(install_cmd, shell=True)
 	print("mvapich2 configured")
-	subprocess.check_call("make -j24", shell=True)
+	subprocess.check_call("make -j12", shell=True)
 	print("mvapich2 made")
 	subprocess.check_call("make install", shell=True)
 	print("mvapich2 installed")
@@ -147,8 +147,8 @@ def install_lapack():
 			f.write("GCC_DIR=" + gcc_dir + "\n")
 			f.write(first_line)
 			f.writelines(lines)
-		subprocess.call("make all -j24", shell=True)
-		subprocess.call("make all -j24", shell=True)
+		subprocess.call("make all -j12", shell=True)
+		subprocess.call("make all -j12", shell=True)
 		print("LAPACK has been made\n")
 		os.chdir("..")
 
@@ -181,7 +181,7 @@ def install_trilinos():
 		f.write("BOOST=" + boost_dir + '\n')
 		f.writelines(lines)
 	subprocess.call("./do-configure", shell=True)
-	subprocess.call("make all -j24", shell=True)
+	subprocess.call("make all -j12", shell=True)
 	subprocess.call("make install", shell=True)
 
 ### Main function
