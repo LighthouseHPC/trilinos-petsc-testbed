@@ -1,0 +1,51 @@
+#!/bin/bash
+TRILINOS_PATH=../trilinos-12.4.2-Source
+EXTRA_ARGS=$@
+
+GCC=/home/pamo8800/project/testbed/gcc-install
+MVAPICH=/home/pamo8800/project/testbed/mvapich2-install
+LAPACK=/home/pamo8800/project/testbed/lapack-3.6.0
+BOOST=/home/pamo8800/project/testbed/boost_1_60_0
+RPATH="-Wl,-rpath-link,${GCC}/lib64"
+ARGS="-llapack -lblas"
+
+cmake \
+-D MPI_BASE_DIR:FILEPATH="${MVAPICH}/" \
+-D MPI_C_COMPILER:FILEPATH="${MVAPICH}/bin/mpicc" \
+-D MPI_CXX_COMPILER:FILEPATH="${MVAPICH}/bin/mpic++" \
+-D MPI_Fortran_COMPILER:FILEPATH="${MVAPICH}/bin/mpifort" \
+-D MPI_INCLUDE_DIRS:FILEPATH="${MVAPICH}/include" \
+-D MPI_LIBRARY_DIRS:FILEPATH="${MVAPICH}/lib" \
+-D CMAKE_INCLUDE_DIRS:FILEPATH="${GCC}/include" \
+-D CMAKE_LIBRARY_DIRS:FILEPATH="${GCC}/lib64" \
+-D CMAKE_INSTALL_PREFIX:FILEPATH=../trilinos-install \
+-D CMAKE_BUILD_TYPE:STRING=RELEASE \
+-D CMAKE_CXX_FLAGS:STRING=-fpermissive \
+-D BLAS_LIBRARY_DIRS:FILEPATH="${LAPACK}/" \
+-D BLAS_LIBRARY_NAMES:STRING="librefblas.a" \
+-D LAPACK_LIBRARY_DIRS:FILEPATH="${LAPACK}/" \
+-D LAPACK_LIBRARY_NAMES:STRING="liblapack.a" \
+-D Trilinos_ENABLE_Tpetra:BOOL=ON \
+-D Trilinos_ENABLE_Epetra:BOOL=ON \
+-D Trilinos_ENABLE_Anasazi:BOOL=ON \
+-D Trilinos_ENABLE_Amesos:BOOL=ON \
+-D Trilinos_ENABLE_Amesos2:BOOL=ON \
+-D Trilinos_ENABLE_Belos:BOOL=ON \
+-D Trilinos_ENABLE_Amesos2:BOOL=ON \
+-D Trilinos_ENABLE_Ifpack:BOOL=ON \
+-D Trilinos_ENABLE_Ifpack2:BOOL=ON \
+-D TPL_ENABLE_BoostLib:BOOL=ON \
+-D TPL_ENABLE_GLM=OFF \
+-D Trilinos_ENABLE_CXX11=ON \
+-D TPL_ENABLE_MPI=ON \
+-D TPL_ENABLE_Boost=ON \
+-D TPL_ENABLE_Netcdf=OFF \
+-D Trilinos_ASSERT_MISSING_PACKAGES=OFF \
+-D Boost_LIBRARY_DIRS:FILEPATH="${BOOST}/stage/lib" \
+-D Boost_INCLUDE_DIRS:FILEPATH="${BOOST}" \
+-D BoostLib_LIBRARY_DIRS:FILEPATH="${BOOST}/stage/lib" \
+-D BoostLib_INCLUDE_DIRS:FILEPATH="${BOOST}" \
+$EXTRA_ARGS \
+$ARGS \
+$RPATH \
+$TRILINOS_PATH
