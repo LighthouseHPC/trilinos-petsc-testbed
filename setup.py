@@ -4,6 +4,7 @@ import urllib
 import os
 import tarfile
 import shutil
+import errno
 
 download_progress = 0
 percentage = 0
@@ -108,14 +109,25 @@ def extract_lapack():
 # Install functions
 def install_gcc():
     print('Downloading pre-requisite packages')
-    os.chdir('gcc-5.3.0')
+    try:
+        os.chdir('gcc-5.3.0')
+    except:
+        print('You have not extracted gcc, or it exists in a different' +
+              ' directory than gcc-5.3.0')
+    exit()
     subprocess.check_call('./contrib/download_prerequisites')
     os.chdir('..')
     print('Downloaded pre-requisite packages')
     # Creating install directory
     print('Configuring gcc')
-    os.mkdir('gcc-install')
-    os.mkdir('gcc-build')
+    try:
+        os.mkdir('gcc-install')
+    except:
+        pass
+    try:
+        os.mkdir('gcc-build')
+    except:
+        pass
     os.chdir('gcc-build')
     gcc_config = ('../gcc-5.3.0/configure'
                   ' --enable-shared'
@@ -134,12 +146,15 @@ def install_gcc():
 
 
 def install_mvapich2():
-    os.mkdir('mvapich2-install')
+    try:
+        os.mkdir('mvapich2-install')
+    except:
+        pass
     os.chdir('mvapich2-2.2b')
     gcc_path = os.path.abspath('../gcc-install/bin')
-    install_cmd = ('./configure' + 
-                   ' CC=' + gcc_path + '/gcc' + 
-                   ' CXX=' + gcc_path + '/g++' + 
+    install_cmd = ('./configure' +
+                   ' CC=' + gcc_path + '/gcc' +
+                   ' CXX=' + gcc_path + '/g++' +
                    ' FC=' + gcc_path + '/gfortran ' +
                    '../mvapich2-install')
     subprocess.check_call(install_cmd, shell=True)
@@ -173,7 +188,10 @@ def install_lapack():
 
 
 def install_boost():
-    os.mkdir('boost-install')
+    try:
+        os.mkdir('boost-install')
+    except:
+        pass
     os.chdir('boost_1_60_0')
     subprocess.call(['./bootstrap.sh', '--with-toolset=gcc'], shell=True)
     print('Boost bootstrapping complete\n')
@@ -188,8 +206,14 @@ def install_trilinos():
     mvapich2_dir = os.path.abspath('./mvapich2-install')
     lapack_dir = os.path.abspath('./lapack-3.6.0')
     boost_dir = os.path.abspath('./boost-install')
-    os.mkdir('trilinos-build')
-    os.mkdir('trilinos-install')
+    try:
+        os.mkdir('trilinos-build')
+    except:
+        pass
+    try:
+        os.mkdir('trilinos-install')
+    except:
+        pass
     shutil.copy('./do-configure', 'trilinos-build/')
     os.chdir('trilinos-build')
     with open('do-configure', 'r+') as f:
@@ -220,7 +244,7 @@ if __name__ == '__main__':
         download_choices[4] = raw_input('Want to download Boost?: ')
         download_choices[5] = raw_input('Want to download Trilinos?: ')
 
-    #  Extraction
+    # Extraction
     extract_choices[0] = raw_input('Want to extract things?: ')
     if extract_choices[0] == 'y':
         extract_choices[1] = raw_input('Want to extract gcc?: ')
@@ -229,7 +253,7 @@ if __name__ == '__main__':
         extract_choices[4] = raw_input('Want to extract Boost?: ')
         extract_choices[5] = raw_input('Want to extract Trilinos?: ')
 
-    #  Installation
+    # Installation
     install_choices[0] = raw_input('Want to install things?: ')
     if install_choices[0] == 'y':
         install_choices[1] = raw_input('Want to install gcc?: ')
