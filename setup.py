@@ -137,6 +137,9 @@ def install_lapack():
 	answer = raw_input("Have you added gcc-install/lib64 to the library path?: ")
 	if answer == 'y' or answer == 'Y':
 		gcc_dir = os.path.abspath('./gcc-install/bin')
+		shutil.copy("make.inc","lapack-3.6.0/make.inc")
+		shutil.copy("Makefile","lapack-3.6.0/Makefile")
+		os.chdir("lapack-3.6.0")
 		with open("make.inc", "r+") as f:
 			first_line = f.readline()
 			lines = f.readlines()
@@ -144,9 +147,6 @@ def install_lapack():
 			f.write("GCC_DIR=" + gcc_dir + "\n")
 			f.write(first_line)
 			f.writelines(lines)
-		shutil.copy("make.inc","lapack-3.6.0/make.inc")
-		shutil.copy("Makefile","lapack-3.6.0/Makefile")
-		os.chdir("lapack-3.6.0")
 		subprocess.call("make all -j24", shell=True)
 		subprocess.call("make all -j24", shell=True)
 		print("LAPACK has been made\n")
@@ -166,6 +166,10 @@ def install_trilinos():
 	mvapich2_dir = os.path.abspath("./mvapich2-install")
 	lapack_dir = os.path.abspath("./lapack-3.6.0")
 	boost_dir = os.path.abspath("./boost-install")
+	os.mkdir("trilinos-build")
+	os.mkdir("trilinos-install")
+	shutil.copy("./do-configure", "trilinos-build/")	
+	os.chdir("trilinos-build")
 	with open("do-configure", "r+") as f:
 		first_line = f.readline()
 		lines = f.readlines()
@@ -176,11 +180,9 @@ def install_trilinos():
 		f.write("LAPACK=" + lapack_dir + '\n')
 		f.write("BOOST=" + boost_dir + '\n')
 		f.writelines(lines)
-	os.mkdir("trilinos-build")
-	os.mkdir("trilinos-install")
-	shutil.copy("./do-configure", "trilinos-build/")	
-	os.chdir("trilinos-build")
 	subprocess.call("./do-configure", shell=True)
+	subprocess.call("make all -j24", shell=True)
+	subprocess.call("make install", shell=True)
 
 ### Main function
 if __name__ == "__main__":
