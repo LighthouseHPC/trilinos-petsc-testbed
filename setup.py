@@ -164,7 +164,7 @@ def install_boost():
 def install_trilinos():
 	gcc_dir = os.path.abspath("./gcc-install")
 	mvapich2_dir = os.path.abspath("./mvapich2-install")
-	lapack_dir = os.path.abspath("./lapack-install")
+	lapack_dir = os.path.abspath("./lapack-3.6.0")
 	boost_dir = os.path.abspath("./boost-install")
 	with open("do-configure", "r+") as f:
 		first_line = f.readline()
@@ -176,6 +176,11 @@ def install_trilinos():
 		f.write("LAPACK=" + lapack_dir + '\n')
 		f.write("BOOST=" + boost_dir + '\n')
 		f.writelines(lines)
+	os.mkdir("trilinos-build")
+	os.mkdir("trilinos-install")
+	shutil.copy("./do-configure", "trilinos-build/")	
+	os.chdir("trilinos-build")
+	subprocess.call("./do-configure", shell=True)
 
 ### Main function
 if __name__ == "__main__":
