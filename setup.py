@@ -112,9 +112,9 @@ def install_gcc():
     try:
         os.chdir('gcc-5.3.0')
     except:
-        print('You have not extracted gcc, or it exists in a different' +
-              ' directory than gcc-5.3.0')
-    exit()
+        print('You have not extracted gcc, or it exists in a different ' +
+              'directory than gcc-5.3.0')
+        exit()
     subprocess.check_call('./contrib/download_prerequisites')
     os.chdir('..')
     print('Downloaded pre-requisite packages')
@@ -135,7 +135,6 @@ def install_gcc():
                   ' --enable-languages=c,c++,fortran'
                   ' --disable-multilib'
                   ' --prefix=' + os.path.abspath('../gcc-install'))
-    print(gcc_config)
     subprocess.check_call(gcc_config.split(), stdout=subprocess.PIPE)
     print('gcc has been configured')
     subprocess.check_call('make -j12', shell=True)
@@ -150,7 +149,12 @@ def install_mvapich2():
         os.mkdir('mvapich2-install')
     except:
         pass
-    os.chdir('mvapich2-2.2b')
+    try:
+        os.chdir('mvapich2-2.2b')
+    except:
+        print('Mvapich2 has either not been extracted or the source files' +
+              ' are not located in mvapich2-2.2b')
+        exit()
     gcc_path = os.path.abspath('../gcc-install/bin')
     install_cmd = ('./configure' +
                    ' CC=' + gcc_path + '/gcc' +
@@ -167,13 +171,22 @@ def install_mvapich2():
 
 
 def install_lapack():
-    answer = raw_input(
-        'Have you added gcc-install/lib64 to the library path?: ')
-    if answer == 'y' or answer == 'Y':
+    answer = raw_input('Is gcc-install/lib64 in the library path?: ')
+    if answer == 'y': 
         gcc_dir = os.path.abspath('./gcc-install/bin')
-        shutil.copy('make.inc', 'lapack-3.6.0/make.inc')
-        shutil.copy('Makefile', 'lapack-3.6.0/Makefile')
-        os.chdir('lapack-3.6.0')
+        try:
+            os.chdir('lapack-3.6.0')
+        except:
+            print('LAPACK has either not been extracted or the files are not' +
+                  ' located in the lapack-3.6.0 directory')
+        try:
+            shutil.copy('../make.inc', 'make.inc')
+            shutil.copy('../Makefile', 'Makefile')
+        except:
+            print('LAPACKs make.inc and/or Makefile could not be found or ' +
+                  'copied into the LAPACK build directory')
+            exit()
+        # Adds gcc directory to LAPACK's dumb make.inc file
         with open('make.inc', 'r+') as f:
             first_line = f.readline()
             lines = f.readlines()
@@ -192,7 +205,12 @@ def install_boost():
         os.mkdir('boost-install')
     except:
         pass
-    os.chdir('boost_1_60_0')
+    try:
+        os.chdir('boost_1_60_0')
+    except:
+        print('Boost has either not been extracted or the files are not in ' +
+              'the boost_1_60_0 directory')
+        exit()
     subprocess.call(['./bootstrap.sh', '--with-toolset=gcc'], shell=True)
     print('Boost bootstrapping complete\n')
     subprocess.call(
@@ -216,6 +234,7 @@ def install_trilinos():
         pass
     shutil.copy('./do-configure', 'trilinos-build/')
     os.chdir('trilinos-build')
+    # Adding unique absolute paths to Trilinos' do-configure script
     with open('do-configure', 'r+') as f:
         first_line = f.readline()
         lines = f.readlines()
