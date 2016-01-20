@@ -1,6 +1,3 @@
-GCC_DIR=/projects/pamo8800/gcc-install/bin
-#  LAPACK, Version 3.6.0                                           #
-#  November 2015                                                   #
 ####################################################################
 #
 SHELL = /bin/sh

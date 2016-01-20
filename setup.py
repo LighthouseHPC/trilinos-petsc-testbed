@@ -109,7 +109,6 @@ def install_gcc():
 	print(gcc_config)                                                                   
 	process = subprocess.check_call(gcc_config.split(), stdout=subprocess.PIPE)              
 	print('gcc has been configured')                                                    
-	os.chdir('gcc-build')
 	process = subprocess.check_call("make -j24", shell=True)
 	print('gcc has been made')                                              
 	process = subprocess.check_call("make install", shell=True)
@@ -135,9 +134,9 @@ def install_mvapich2():
 	os.chdir('..')
 
 def install_lapack():
-	answer = raw_input("Have you added gcc-install/lib64 to the library path?")
+	answer = raw_input("Have you added gcc-install/lib64 to the library path?: ")
 	if answer == 'y' or answer == 'Y':
-		gcc_dir = os.path.abspath('gcc-install/bin')
+		gcc_dir = os.path.abspath('./gcc-install/bin')
 		with open("make.inc", "r+") as f:
 			first_line = f.readline()
 			lines = f.readlines()
@@ -153,6 +152,14 @@ def install_lapack():
 		print("LAPACK has been made\n")
 		os.chdir("..")
 
+def install_boost():
+	os.mkdir("boost-install")
+	os.chdir("boost_1_60_0")
+	subprocess.call(["./bootstrap.sh", "--with-toolset=gcc"], shell=True)
+	print("Boost bootstrapping complete\n")
+	subprocess.call(["./b2", "install", "--prefix=" + os.path.abspath("../boost-install")])
+	print("Boost has been installed\n")
+	os.chdir("..")
 
 ### Main function
 if __name__ == "__main__":
@@ -181,6 +188,7 @@ if __name__ == "__main__":
 		gcc_install = raw_input('Want to install gcc?: ')
 		mvapich2_install = raw_input('Want to install mvapich2?: ')
 		lapack_install = raw_input('Want to install LAPACK?: ')
+		boost_install = raw_input('Want to install Boost?: ')
 
 	if download == 'y' or download == 'Y':
 		if gcc_download == 'y' or gcc_download == 'Y':
@@ -213,3 +221,5 @@ if __name__ == "__main__":
 			install_mvapich2()
 		if lapack_install == 'y' or lapack_install == 'Y':
 			install_lapack()
+		if boost_install == 'y' or boost_install == 'Y':
+			install_boost()
