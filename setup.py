@@ -135,7 +135,7 @@ def install_gcc():
         print('You have not extracted gcc, or it exists in a different ' +
               'directory than gcc-5.3.0')
         exit()
-    subprocess.check_call('./contrib/download_prerequisites')
+    subprocess.call('./contrib/download_prerequisites')
     os.chdir('..')
     print('Downloaded pre-requisite packages')
     # Creating install directory
@@ -155,11 +155,11 @@ def install_gcc():
                   ' --enable-languages=c,c++,fortran'
                   ' --disable-multilib'
                   ' --prefix=' + os.path.abspath('../gcc-install'))
-    subprocess.check_call(gcc_config.split(), stdout=subprocess.PIPE)
+    subprocess.call(gcc_config.split(), stdout=subprocess.PIPE)
     print('gcc has been configured')
-    subprocess.check_call('make -j12', shell=True)
+    subprocess.call('make -j12', shell=True)
     print('gcc has been made')
-    subprocess.check_call('make install', shell=True)
+    subprocess.call('make install', shell=True)
     print('gcc has been installed')
     os.chdir('..')
 
@@ -181,11 +181,11 @@ def install_mvapich2():
                    ' CXX=' + gcc_path + '/g++' +
                    ' FC=' + gcc_path + '/gfortran ' +
                    ' --prefix' + os.path.abspath('../mvapich2-install'))
-    subprocess.check_call(install_cmd, shell=True)
+    subprocess.call(install_cmd, shell=True)
     print('mvapich2 configured')
-    subprocess.check_call('make -j12', shell=True)
+    subprocess.call('make -j12', shell=True)
     print('mvapich2 made')
-    subprocess.check_call('make install', shell=True)
+    subprocess.call('make install', shell=True)
     print('mvapich2 installed')
     os.chdir('..')
 
