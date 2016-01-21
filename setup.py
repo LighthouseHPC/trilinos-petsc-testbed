@@ -180,7 +180,7 @@ def install_mvapich2():
                    ' CC=' + gcc_path + '/gcc' +
                    ' CXX=' + gcc_path + '/g++' +
                    ' FC=' + gcc_path + '/gfortran ' +
-                   '../mvapich2-install')
+                   ' --prefix' + os.path.abspath('../mvapich2-install'))
     subprocess.check_call(install_cmd, shell=True)
     print('mvapich2 configured')
     subprocess.check_call('make -j12', shell=True)
