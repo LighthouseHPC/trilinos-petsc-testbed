@@ -180,7 +180,7 @@ def install_mvapich2():
                    ' CC=' + gcc_path + '/bin/gcc' +
                    ' CXX=' + gcc_path + '/bin/g++' +
                    ' FC=' + gcc_path + '/bin/gfortran' +
-				   ' LDFLAGS=-Wl,-rpath,'+ gcc_path + '/lib64' +
+                   ' LDFLAGS=-Wl,-rpath,'+ gcc_path + '/lib64' +
                    ' --prefix=' + os.path.abspath('../mvapich2-install'))
     subprocess.call(install_cmd, shell=True)
     print('mvapich2 configured')
@@ -213,6 +213,7 @@ def install_lapack():
         f.write('GCC_DIR=' + gcc_dir + '\n')
         f.write(first_line)
         f.writelines(lines)
+    subprocess.call('make clean', shell=True)
     subprocess.call('make all -j12', shell=True)
     subprocess.call('make all -j12', shell=True)
     print('LAPACK has been made\n')
@@ -220,6 +221,12 @@ def install_lapack():
 
 
 def install_boost():
+    try:
+        home = os.path.expanduser('~')
+        print home
+        shutil.copy('user-config.jam', home);
+    except:
+        print('Cannot copy user-config.jam to $HOME')
     try:
         os.mkdir('boost-install')
     except:
@@ -230,7 +237,7 @@ def install_boost():
         print('Boost has either not been extracted or the files are not in ' +
               'the boost_1_60_0 directory')
         exit()
-    subprocess.call(['./bootstrap.sh', '--with-toolset=gcc'], shell=True)
+    subprocess.call(['./bootstrap.sh'], shell=True)
     print('Boost bootstrapping complete\n')
     subprocess.call(
         ['./b2', 'install', '--prefix=' + os.path.abspath('../boost-install')])
