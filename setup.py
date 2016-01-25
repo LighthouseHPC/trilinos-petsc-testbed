@@ -175,11 +175,12 @@ def install_mvapich2():
         print('Mvapich2 has either not been extracted or the source files' +
               ' are not located in mvapich2-2.2b')
         exit()
-    gcc_path = os.path.abspath('../gcc-install/bin')
+    gcc_path = os.path.abspath('../gcc-install')
     install_cmd = ('./configure' +
-                   ' CC=' + gcc_path + '/gcc' +
-                   ' CXX=' + gcc_path + '/g++' +
-                   ' FC=' + gcc_path + '/gfortran ' +
+                   ' CC=' + gcc_path + '/bin/gcc' +
+                   ' CXX=' + gcc_path + '/bin/g++' +
+                   ' FC=' + gcc_path + '/bin/gfortran' +
+				   ' LDFLAGS=-Wl,-rpath,'+ gcc_path + '/lib64' +
                    ' --prefix=' + os.path.abspath('../mvapich2-install'))
     subprocess.call(install_cmd, shell=True)
     print('mvapich2 configured')
@@ -294,8 +295,6 @@ if __name__ == '__main__':
     install_choices[0] = raw_input('Want to install things?: ')
     if install_choices[0] == 'y':
         install_choices[1] = raw_input('Want to install gcc?: ')
-        print('The following options all require gcc-install/lib64 to be in your\n'
-              'LD_LIBRARY_PATH environment variable. This will need to be added manually')
         install_choices[2] = raw_input('Want to install mvapich2?: ')
         install_choices[3] = raw_input('Want to install LAPACK?: ')
         install_choices[4] = raw_input('Want to install Boost?: ')
