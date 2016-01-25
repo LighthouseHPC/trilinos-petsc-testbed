@@ -191,33 +191,31 @@ def install_mvapich2():
 
 
 def install_lapack():
-    answer = raw_input('Is gcc-install/lib64 in the library path?: ')
-    if answer == 'y': 
-        gcc_dir = os.path.abspath('./gcc-install/bin')
-        try:
-            os.chdir('lapack-3.6.0')
-        except:
-            print('LAPACK has either not been extracted or the files are not' +
-                  ' located in the lapack-3.6.0 directory')
-        try:
-            shutil.copy('../make.inc', 'make.inc')
-            shutil.copy('../Makefile', 'Makefile')
-        except:
-            print('LAPACKs make.inc and/or Makefile could not be found or ' +
-                  'copied into the LAPACK build directory')
-            exit()
-        # Adds gcc directory to LAPACK's dumb make.inc file
-        with open('make.inc', 'r+') as f:
-            first_line = f.readline()
-            lines = f.readlines()
-            f.seek(0)
-            f.write('GCC_DIR=' + gcc_dir + '\n')
-            f.write(first_line)
-            f.writelines(lines)
-        subprocess.call('make all -j12', shell=True)
-        subprocess.call('make all -j12', shell=True)
-        print('LAPACK has been made\n')
-        os.chdir('..')
+    gcc_dir = os.path.abspath('./gcc-install/bin')
+    try:
+        os.chdir('lapack-3.6.0')
+    except:
+        print('LAPACK has either not been extracted or the files are not' +
+              ' located in the lapack-3.6.0 directory')
+    try:
+        shutil.copy('../make.inc', 'make.inc')
+        shutil.copy('../Makefile', 'Makefile')
+    except:
+        print('LAPACKs make.inc and/or Makefile could not be found or ' +
+              'copied into the LAPACK build directory')
+        exit()
+    # Adds gcc directory to LAPACK's dumb make.inc file
+    with open('make.inc', 'r+') as f:
+        first_line = f.readline()
+        lines = f.readlines()
+        f.seek(0)
+        f.write('GCC_DIR=' + gcc_dir + '\n')
+        f.write(first_line)
+        f.writelines(lines)
+    subprocess.call('make all -j12', shell=True)
+    subprocess.call('make all -j12', shell=True)
+    print('LAPACK has been made\n')
+    os.chdir('..')
 
 
 def install_boost():
@@ -296,6 +294,8 @@ if __name__ == '__main__':
     install_choices[0] = raw_input('Want to install things?: ')
     if install_choices[0] == 'y':
         install_choices[1] = raw_input('Want to install gcc?: ')
+        print('The following options all require gcc-install/lib64 to be in your\n'
+              'LD_LIBRARY_PATH environment variable. This will need to be added manually')
         install_choices[2] = raw_input('Want to install mvapich2?: ')
         install_choices[3] = raw_input('Want to install LAPACK?: ')
         install_choices[4] = raw_input('Want to install Boost?: ')
