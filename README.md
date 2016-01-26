@@ -1,18 +1,16 @@
 # trilinos-testbed
 Unified system for Trilinos testing 
 
-This script is intended to create a standalone build of Trilinos. 
-It downloads and builds the following without any other dependencies from the host machine:
-- gcc
-- MVAPICH2
-- LAPACK
-- Boost
-- Trilinos
+This script is intended to create a standalone build of Trilinos with minimal effort from the user. 
+The only requirements are make, cmake, wget, and python 2.6+. 
 
-During the install process you may have to add "gcc-install/lib64" to the Library Path.
+The script will download, extract, and install the following libraries and compilers via a simple command line interface:
+- gcc 5.3.0
+- MVAPICH2 2.2b
+- LAPACK 3.6.0
+- Boost 1.60.0
+- Trilinos 12.4.2
 
-The additional Makefile and make.inc files are modified install files for LAPACK and will
-be copied to the build directory. 
-
-For whatever reason, LAPACK's build may fail towards the end. Re-running the build command seems to 
-be a workaround. 
+The additional files that are included in the repo are modified install files for some of the 
+libraries. They will be automatically moved or copied to the appropriate build directories 
+including one (Boost) to your home directory.  
