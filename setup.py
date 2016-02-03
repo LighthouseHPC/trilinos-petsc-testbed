@@ -328,8 +328,14 @@ if __name__ == '__main__':
     LIBDIR = os.path.abspath('./gcc-install/lib64')
     GCC_PATH = os.path.abspath('./gcc-install/bin')
     MPI_PATH = os.path.abspath('./openmpi-install/bin')
-    os.environ['LD_LIBRARY_PATH'] = os.environ['LD_LIBRARY_PATH'] + ':' + LIBDIR
-    os.environ['PATH'] = GCC_PATH + ':' + MPI_PATH + ':' + os.environ['PATH'] 
+    if 'LD_LIBRARY_PATH' in os.environ:
+        os.environ['LD_LIBRARY_PATH'] = os.environ['LD_LIBRARY_PATH'] + ':' + LIBDIR
+    else:
+        os.environ['LD_LIBRARY_PATH'] = LIBDIR
+    if 'PATH' in os.environ:
+        os.environ['PATH'] = GCC_PATH + ':' + MPI_PATH + ':' + os.environ['PATH'] 
+    else:
+        os.environ['PATH'] = GCC_PATH + ':' + MPI_PATH
 
     options = ['gcc', 'openmpi', 'LAPACK', 'Boost', 'Trilinos', 'PETSc']
     #  Downloading
