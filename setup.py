@@ -319,10 +319,13 @@ def install_petsc():
                    ' --with-lapack-lib=' + lapack_dir + '/liblapack.a' +
                    ' --with-blas-lib=' + lapack_dir + '/librefblas.a' +
                    ' --prefix=' + os.path.abspath('../petsc-install') +
-                   ' --with-shared-libraries=0'
+                   ' --with-shared-libraries=0' +
+                   ' --with-debugging=0' +
+                   ' COPTFLAGS="-O3"' +
+                   ' FOPTFLAGS="-O3"'
                   )
     subprocess.call(install_cmd, shell=True)
-
+    print('Navigate to petsc-3.6.3/ and run the above commands to finish the installation process\n')
 
 if __name__ == '__main__':
     download_choices = []
