@@ -99,7 +99,7 @@ link_directories(${Trilinos_TPL_LIBRARY_DIRS})
 # file that you want to build.  This line tells CMake which source
 # file(s) to use to build the executable.
 #
-add_executable(tpetra_solvers ${SOURCES})
+add_executable(trilinos_test ${SOURCES})
 
 #
 # EDIT HERE: Change trilinosExample to the name of the executable
@@ -107,7 +107,7 @@ add_executable(tpetra_solvers ${SOURCES})
 # with the Trilinos libraries, and with the third-party libraries 
 # (TPLs) with which Trilinos was built.
 #
-target_link_libraries(tpetra_solvers
+target_link_libraries(trilinos_test
   ${Trilinos_LIBRARIES} 
   ${Trilinos_TPL_LIBRARIES}
   )
