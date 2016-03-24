@@ -220,8 +220,8 @@ def install_lapack():
         print('LAPACK has either not been extracted or the files are not' +
               ' located in the lapack-3.6.0 directory')
     try:
-        shutil.copy('../make.inc', 'make.inc')
-        shutil.copy('../Makefile', 'Makefile')
+        shutil.copy('../extra_files/make.inc', 'make.inc')
+        shutil.copy('../extra_files/Makefile', 'Makefile')
     except:
         print('LAPACKs make.inc and/or Makefile could not be found or ' +
               'copied into the LAPACK build directory')
@@ -248,7 +248,7 @@ def install_boost():
     try:
         home = os.path.expanduser('~')
         print home
-        shutil.copy('user-config.jam', home);
+        shutil.copy('extra_files/user-config.jam', home);
     except:
         print('Cannot copy user-config.jam to $HOME')
     try:
@@ -282,7 +282,7 @@ def install_trilinos():
         os.mkdir('trilinos-install')
     except:
         pass
-    shutil.copy('./do-configure', 'trilinos-build/')
+    shutil.copy('extra_files/do-configure', 'trilinos-build/')
     os.chdir('trilinos-build')
     # Adding unique absolute paths to Trilinos' do-configure script
     with open('do-configure', 'r+') as f:
