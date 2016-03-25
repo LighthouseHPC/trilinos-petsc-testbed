@@ -5,10 +5,12 @@ import os
 import tarfile
 import shutil
 import errno
+import psutil
 
-download_progress = 0
-percentage = 0
 LIBDIR = ''
+percentage = 0
+download_progress = 0
+cpuCount = 0
 
 
 def dl_progress(block_no, block_size, file_size):
@@ -243,12 +245,12 @@ def install_lapack():
 
 def install_boost():
     # Create user-config.jam
-    with open('user-config.jam', 'w') as boost_file:
+    with open('./extra_files/user-config.jam', 'w') as boost_file:
         boost_file.write('using gcc : 5.3.0 : ' + os.path.abspath('./gcc-install/bin/gcc'))
     try:
         home = os.path.expanduser('~')
         print home
-        shutil.copy('extra_files/user-config.jam', home);
+        shutil.copy('./extra_files/user-config.jam', home);
     except:
         print('Cannot copy user-config.jam to $HOME')
     try:
@@ -310,7 +312,7 @@ def install_petsc():
     except:
         pass
     try:
-        os.chdir('petsc-3.6.3')
+        os.chdir('./petsc-3.6.3')
     except:
         print('petsc-3.6.3 does not exist')
         exit()
@@ -328,6 +330,10 @@ def install_petsc():
     print('Navigate to petsc-3.6.3/ and run the above commands to finish the installation process\n')
 
 if __name__ == '__main__':
+    try:
+        cpuCount = psutil.cpu_count()
+    except: 
+        cpuCount = 4 
     download_choices = []
     extract_choices = []
     install_choices = []
