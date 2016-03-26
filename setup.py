@@ -349,63 +349,67 @@ if __name__ == '__main__':
     else:
         os.environ['PATH'] = GCC_PATH + ':' + MPI_PATH
 
-    options = ['gcc', 'openmpi', 'LAPACK', 'Boost', 'Trilinos', 'PETSc']
-    #  Downloading
-    download = raw_input('Want to download things?: ')
-    if download == 'y':
-        for i in range(len(options)):
-            download_choices.append(raw_input('Want to download ' + options[i]  + '?: '))
+    newpid = os.fork()
+    if newpid is 0:
+        options = ['gcc', 'openmpi', 'LAPACK', 'Boost', 'Trilinos', 'PETSc']
+        #  Downloading
+        download = raw_input('Want to download things?: ')
+        if download == 'y':
+            for i in range(len(options)):
+                download_choices.append(raw_input('Want to download ' + options[i]  + '?: '))
 
-    # Extraction
-    extract = raw_input('Want to extract things?: ')
-    if extract == 'y':
-        for i in range(len(options)):
-            extract_choices.append(raw_input('Want to extract ' + options[i]  + '?: '))
+        # Extraction
+        extract = raw_input('Want to extract things?: ')
+        if extract == 'y':
+            for i in range(len(options)):
+                extract_choices.append(raw_input('Want to extract ' + options[i]  + '?: '))
 
-    # Installation
-    install = raw_input('Want to install things?: ')
-    if install == 'y':
-        for i in range(len(options)):
-            install_choices.append(raw_input('Want to install ' + options[i]  + '?: '))
+        # Installation
+        install = raw_input('Want to install things?: ')
+        if install == 'y':
+            for i in range(len(options)):
+                install_choices.append(raw_input('Want to install ' + options[i]  + '?: '))
 
-    if download == 'y':
-        if download_choices[0] == 'y':
-            download_gcc()
-        if download_choices[1] == 'y':
-            download_openmpi()
-        if download_choices[2] == 'y':
-            download_lapack()
-        if download_choices[3] == 'y':
-            download_boost()
-        if download_choices[4] == 'y':
-            download_trilinos()
-        if download_choices[5] == 'y':
-            download_petsc()
+        if download == 'y':
+            if download_choices[0] == 'y':
+                download_gcc()
+            if download_choices[1] == 'y':
+                download_openmpi()
+            if download_choices[2] == 'y':
+                download_lapack()
+            if download_choices[3] == 'y':
+                download_boost()
+            if download_choices[4] == 'y':
+                download_trilinos()
+            if download_choices[5] == 'y':
+                download_petsc()
 
-    if extract == 'y':
-        if extract_choices[0] == 'y':
-            extract_gcc()
-        if extract_choices[1] == 'y':
-            extract_openmpi()
-        if extract_choices[2] == 'y':
-            extract_lapack()
-        if extract_choices[3] == 'y':
-            extract_boost()
-        if extract_choices[4] == 'y':
-            extract_trilinos()
-        if extract_choices[5] == 'y':
-            extract_petsc()
+        if extract == 'y':
+            if extract_choices[0] == 'y':
+                extract_gcc()
+            if extract_choices[1] == 'y':
+                extract_openmpi()
+            if extract_choices[2] == 'y':
+                extract_lapack()
+            if extract_choices[3] == 'y':
+                extract_boost()
+            if extract_choices[4] == 'y':
+                extract_trilinos()
+            if extract_choices[5] == 'y':
+                extract_petsc()
 
-    if install == 'y':
-        if install_choices[0] == 'y':
-            install_gcc()
-        if install_choices[1] == 'y':
-            install_openmpi()
-        if install_choices[2] == 'y':
-            install_lapack()
-        if install_choices[3] == 'y':
-            install_boost()
-        if install_choices[4] == 'y':
-            install_trilinos()
-        if install_choices[5] == 'y':
-            install_petsc()
+        if install == 'y':
+            if install_choices[0] == 'y':
+                install_gcc()
+            if install_choices[1] == 'y':
+                install_openmpi()
+            if install_choices[2] == 'y':
+                install_lapack()
+            if install_choices[3] == 'y':
+                install_boost()
+            if install_choices[4] == 'y':
+                install_trilinos()
+            if install_choices[5] == 'y':
+                install_petsc()
+    else:
+        os.waitpid(newpid, 0)
