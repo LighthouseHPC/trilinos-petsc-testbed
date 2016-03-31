@@ -3,7 +3,7 @@
 TRILINOS_PATH=../trilinos-12.4.2-Source
 EXTRA_ARGS=$@
 RPATH="-Wl,-rpath-link,${GCC}/lib64"
-ARGS="-llapack -lblas"
+ARGS="-llapack -lblas -fopenmp"
 
 cmake \
 -D MPI_BASE_DIR:FILEPATH="${MVAPICH}/" \
@@ -21,6 +21,7 @@ cmake \
 -D BLAS_LIBRARY_NAMES:STRING="librefblas.a" \
 -D LAPACK_LIBRARY_DIRS:FILEPATH="${LAPACK}/" \
 -D LAPACK_LIBRARY_NAMES:STRING="liblapack.a" \
+-D Trilinos_ENABLE_OpenMP:BOOL=ON \
 -D Trilinos_ENABLE_Tpetra:BOOL=ON \
 -D Trilinos_ENABLE_Epetra:BOOL=ON \
 -D Trilinos_ENABLE_Anasazi:BOOL=ON \

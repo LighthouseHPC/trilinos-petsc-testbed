@@ -5,12 +5,14 @@ import os
 import tarfile
 import shutil
 import errno
-import psutil
-
+try:
+    import psutil
+    cpuCount = psutil.cpu_count()
+except:
+    cpuCount = 4
 LIBDIR = ''
 percentage = 0
 download_progress = 0
-cpuCount = 0
 
 
 def dl_progress(block_no, block_size, file_size):
@@ -180,7 +182,7 @@ def install_gcc():
                   ' --prefix=' + os.path.abspath('../gcc-install'))
     subprocess.call(gcc_config.split(), stdout=subprocess.PIPE)
     print('gcc has been configured')
-    subprocess.call('make -j12', shell=True)
+    subprocess.call('make -j' + str(cpuCount), shell=True)
     print('gcc has been made')
     subprocess.call('make install', shell=True)
     print('gcc has been installed')
@@ -207,7 +209,7 @@ def install_openmpi():
                    ' --prefix=' + os.path.abspath('../openmpi-install'))
     subprocess.call(install_cmd, shell=True)
     print('openmpi configured')
-    subprocess.call('make -j12', shell=True)
+    subprocess.call('make -j' + str(cpuCount), shell=True)
     print('openmpi made')
     subprocess.call('make install', shell=True)
     print('openmpi installed')
@@ -330,10 +332,6 @@ def install_petsc():
     print('Navigate to petsc-3.6.3/ and run the above commands to finish the installation process\n')
 
 if __name__ == '__main__':
-    try:
-        cpuCount = psutil.cpu_count()
-    except: 
-        cpuCount = 4 
     download_choices = []
     extract_choices = []
     install_choices = []
