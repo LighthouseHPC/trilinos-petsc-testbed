@@ -248,7 +248,7 @@ def install_lapack():
 def install_boost():
     # Create user-config.jam
     with open('./extra_files/user-config.jam', 'w') as boost_file:
-        boost_file.write('using gcc : 5.3.0 : ' + os.path.abspath('./gcc-install/bin/gcc'))
+        boost_file.write('using gcc : 5.3.0 : ' + os.path.abspath('./gcc-install/bin/gcc ;'))
     try:
         home = os.path.expanduser('~')
         print home
