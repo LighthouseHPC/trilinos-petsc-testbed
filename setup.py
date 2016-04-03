@@ -246,7 +246,7 @@ def install_lapack():
 def install_boost():
     # Create user-config.jam
     with open('./extra_files/user-config.jam', 'w') as boost_file:
-        boost_file.write('using gcc : 5.3.0 : ' + os.path.abspath('./gcc-install/bin/gcc'))
+        boost_file.write('using mpi : ' + os.path.abspath('./openmpi-install/bin/mpicc ;'))
     try:
         home = os.path.expanduser('~')
         print home
@@ -337,7 +337,7 @@ if __name__ == '__main__':
     download_choices = []
     extract_choices = []
     install_choices = []
-    LIBDIR = os.path.abspath('./gcc-install/lib64')
+    LIBDIR = os.path.abspath('./gcc-install/lib64') + ":" + os.path.abspath('./openmpi-install/lib')
     GCC_PATH = os.path.abspath('./gcc-install/bin')
     MPI_PATH = os.path.abspath('./openmpi-install/bin')
     if 'LD_LIBRARY_PATH' in os.environ:
