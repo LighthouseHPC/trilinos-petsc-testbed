@@ -5,14 +5,12 @@ import os
 import tarfile
 import shutil
 import errno
-try:
-    import psutil
-    cpuCount = psutil.cpu_count()
-except:
-    cpuCount = 4
+import psutil
+
 LIBDIR = ''
 percentage = 0
 download_progress = 0
+cpuCount = 0
 
 
 def dl_progress(block_no, block_size, file_size):
@@ -182,7 +180,7 @@ def install_gcc():
                   ' --prefix=' + os.path.abspath('../gcc-install'))
     subprocess.call(gcc_config.split(), stdout=subprocess.PIPE)
     print('gcc has been configured')
-    subprocess.call('make -j' + str(cpuCount), shell=True)
+    subprocess.call('make -j12', shell=True)
     print('gcc has been made')
     subprocess.call('make install', shell=True)
     print('gcc has been installed')
@@ -209,7 +207,7 @@ def install_openmpi():
                    ' --prefix=' + os.path.abspath('../openmpi-install'))
     subprocess.call(install_cmd, shell=True)
     print('openmpi configured')
-    subprocess.call('make -j' + str(cpuCount), shell=True)
+    subprocess.call('make -j12', shell=True)
     print('openmpi made')
     subprocess.call('make install', shell=True)
     print('openmpi installed')
@@ -248,7 +246,7 @@ def install_lapack():
 def install_boost():
     # Create user-config.jam
     with open('./extra_files/user-config.jam', 'w') as boost_file:
-        boost_file.write('using gcc : 5.3.0 : ' + os.path.abspath('./gcc-install/bin/gcc ;'))
+        boost_file.write('using gcc : 5.3.0 : ' + os.path.abspath('./gcc-install/bin/gcc'))
     try:
         home = os.path.expanduser('~')
         print home
@@ -332,6 +330,10 @@ def install_petsc():
     print('Navigate to petsc-3.6.3/ and run the above commands to finish the installation process\n')
 
 if __name__ == '__main__':
+    try:
+        cpuCount = psutil.cpu_count()
+    except: 
+        cpuCount = 4 
     download_choices = []
     extract_choices = []
     install_choices = []
