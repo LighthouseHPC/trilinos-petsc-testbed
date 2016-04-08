@@ -1,0 +1,9 @@
+boost*
+gcc*
+lapack*
+openmpi*
+petsc*
+trilinos*
+*cmake*
+*CMake*
+
