@@ -5,12 +5,11 @@ import os
 import tarfile
 import shutil
 import errno
-import psutil
 
 LIBDIR = ''
 percentage = 0
 download_progress = 0
-cpuCount = 0
+cpuCount = 4
 
 
 def dl_progress(block_no, block_size, file_size):
@@ -24,10 +23,10 @@ def dl_progress(block_no, block_size, file_size):
 def download_gcc():
     global percentage
     percentage = 0
-    print('Downloading gcc 5.3.0')
-    urllib.urlretrieve('ftp://ftp.gnu.org/gnu/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2',
-                       'gcc-5.3.0.tar.bz2', reporthook=dl_progress)
-    print('Downloaded gcc 5.3.0')
+    print('Downloading gcc 6.2.0')
+    urllib.urlretrieve('ftp://ftp.gnu.org/gnu/gcc/gcc-6.2.0/gcc-6.2.0.tar.bz2',
+                       'gcc-6.2.0.tar.bz2', reporthook=dl_progress)
+    print('Downloaded gcc 6.2.0')
 
 
 def download_openmpi():
@@ -78,15 +77,15 @@ def download_petsc():
     print('Downloaded PETSc 3.6.3')
 
 def extract_gcc():
-    print('Extracting gcc 5.3.0')
+    print('Extracting gcc 6.2.0')
     try:
-        gcc_tar = tarfile.open('gcc-5.3.0.tar.bz2')
+        gcc_tar = tarfile.open('gcc-6.2.0.tar.bz2')
     except:
         print('gcc tar file does not exist')
         exit()
     gcc_tar.extractall()
     gcc_tar.close()
-    print('Extracted gcc 5.3.0')
+    print('Extracted gcc 6.2.0')
 
 
 def extract_openmpi():
@@ -153,10 +152,10 @@ def extract_petsc():
 def install_gcc():
     print('Downloading pre-requisite packages')
     try:
-        os.chdir('gcc-5.3.0')
+        os.chdir('gcc-6.2.0')
     except:
         print('You have not extracted gcc, or it exists in a different ' +
-              'directory than gcc-5.3.0')
+              'directory than gcc-6.2.0')
         exit()
     subprocess.call('./contrib/download_prerequisites')
     os.chdir('..')
@@ -172,7 +171,7 @@ def install_gcc():
     except:
         pass
     os.chdir('gcc-build')
-    gcc_config = ('../gcc-5.3.0/configure'
+    gcc_config = ('../gcc-6.2.0/configure'
                   ' --enable-shared'
                   ' --enable-threads=posix'
                   ' --enable-languages=c,c++,fortran'
@@ -180,7 +179,7 @@ def install_gcc():
                   ' --prefix=' + os.path.abspath('../gcc-install'))
     subprocess.call(gcc_config.split(), stdout=subprocess.PIPE)
     print('gcc has been configured')
-    subprocess.call('make -j12', shell=True)
+    subprocess.call('make -j4', shell=True)
     print('gcc has been made')
     subprocess.call('make install', shell=True)
     print('gcc has been installed')
@@ -207,7 +206,7 @@ def install_openmpi():
                    ' --prefix=' + os.path.abspath('../openmpi-install'))
     subprocess.call(install_cmd, shell=True)
     print('openmpi configured')
-    subprocess.call('make -j12', shell=True)
+    subprocess.call('make -j4', shell=True)
     print('openmpi made')
     subprocess.call('make install', shell=True)
     print('openmpi installed')
@@ -237,8 +236,8 @@ def install_lapack():
         f.write(first_line)
         f.writelines(lines)
     subprocess.call('make clean', shell=True)
-    subprocess.call('make all -j12', shell=True)
-    subprocess.call('make all -j12', shell=True)
+    subprocess.call('make all -j4', shell=True)
+    subprocess.call('make all -j4', shell=True)
     print('LAPACK has been made\n')
     os.chdir('..')
 
@@ -298,7 +297,7 @@ def install_trilinos():
         f.write('BOOST=' + boost_dir + '\n')
         f.writelines(lines)
     subprocess.call('./do-configure', shell=True)
-    subprocess.call('make all -j12', shell=True)
+    subprocess.call('make all -j4', shell=True)
     subprocess.call('make install', shell=True)
 
 
@@ -330,10 +329,6 @@ def install_petsc():
     print('Navigate to petsc-3.6.3/ and run the above commands to finish the installation process\n')
 
 if __name__ == '__main__':
-    try:
-        cpuCount = psutil.cpu_count()
-    except: 
-        cpuCount = 4 
     download_choices = []
     extract_choices = []
     install_choices = []
