@@ -101,15 +101,15 @@ def extract_openmpi():
 
 
 def extract_trilinos():
-    print('Extracting Trilinos 12.4.2')
+    print('Extracting Trilinos 12.8.1')
     try:
-        trilinos_tar = tarfile.open('trilinos-12.4.2.tar.bz2')
+        trilinos_tar = tarfile.open('trilinos-12.8.1.tar.bz2')
     except:
         print('Trilinos tar file does not exist')
         exit()
     trilinos_tar.extractall()
     trilinos_tar.close()
-    print('Extracted Trilinos 12.4.2')
+    print('Extracted Trilinos 12.8.1')
 
 
 def extract_boost():
