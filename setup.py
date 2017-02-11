@@ -61,11 +61,11 @@ def download_boost():
 def download_trilinos():
     global percentage
     percentage = 0
-    print('Downloading Trilinos 12.4.2')
+    print('Downloading Trilinos 12.8.1')
     urllib.urlretrieve(
-        'http://trilinos.csbsju.edu/download/files/trilinos-12.4.2-Source.tar.bz2',
-        'trilinos-12.4.2.tar.bz2', reporthook=dl_progress)
-    print('Downloaded Trilinos 12.4.2')
+        'http://trilinos.csbsju.edu/download/files/trilinos-12.8.1-Source.tar.bz2',
+        'trilinos-12.8.1.tar.bz2', reporthook=dl_progress)
+    print('Downloaded Trilinos 12.8.1')
 
 def download_petsc():
     global percentage
